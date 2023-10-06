@@ -1,8 +1,12 @@
 import { Label, Div, Button, DivName } from './MyForm.styled'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, selectContacts } from './redux';
 
-export const ContactForm = ({ contacts, onSubmit }) => {
+export const ContactForm = () => {
+    const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
     const validateName = value => {
         let errorMessage;
         if (!value) {
@@ -25,21 +29,19 @@ export const ContactForm = ({ contacts, onSubmit }) => {
 
 
     const handleFormSubmit = (values, { resetForm }) => {
-        const existingContact = contacts.find(
-            contact => contact.name.toLowerCase() === values.name.toLowerCase()
-        );
+    const existingContact = contacts.find(contact => contact.name.toLowerCase() === values.name.toLowerCase());
 
-        if (existingContact) {
-            alert(`Contact "${values.name}" already exists.`);
-        } else {
-            const newContact = {
-                id: uuidv4(),
-                name: values.name,
-                number: values.number,
-            };
-            onSubmit(newContact);
-            resetForm();
-        }
+    if (existingContact) {
+      alert(`Contact "${values.name}" already exists.`);
+    } else {
+      const newContact = {
+        id: uuidv4(),
+        name: values.name,
+        number: values.number,
+      };
+      dispatch(addContact(newContact));
+      resetForm();
+    }
     };
 
     return (
