@@ -44,16 +44,5 @@ export const App = () => {
     contact.name && contact.name.toLowerCase().includes(filter && filter.toLowerCase())
   );
 
-  return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm onSubmit={handleContactSubmit} contacts={contacts} />
-      
-      <h2>Contacts</h2>
-      <Filter value={filter || ''} onChange={handleFilterChange} />
-      {filteredContacts.length > 0 && (
-        <ContactList contacts={filteredContacts} onDeleteContact={handleContactDelete} />
-      )}
-    </div>
-  );
+
 };
