@@ -12,7 +12,7 @@ export const App = () => {
   const filter = useSelector(selectFilter);
 
   useEffect(() => {
-    // Load contacts from localStorage
+    // Load contacts from localStorage on component mount
     const savedContacts = localStorage.getItem('contacts');
     if (savedContacts) {
       const parsedContacts = JSON.parse(savedContacts);
@@ -22,22 +22,21 @@ export const App = () => {
     }
   }, [dispatch]);
 
+  // Update local storage whenever contacts change
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
   const handleContactSubmit = newContact => {
     dispatch(addContact(newContact));
-    updateLocalStorage([...contacts, newContact]);
   };
 
   const handleContactDelete = contactId => {
     dispatch(removeContact(contactId));
-    updateLocalStorage(contacts.filter(contact => contact.id !== contactId));
   };
 
   const handleFilterChange = event => {
     dispatch(setFilter(event.target.value));
-  };
-
-  const updateLocalStorage = updatedContacts => {
-    localStorage.setItem('contacts', JSON.stringify(updatedContacts));
   };
 
   const filteredContacts = contacts.filter(contact =>
