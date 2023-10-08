@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, removeContact, setFilter, selectContacts, selectFilter } from './redux';
-import { ContactForm } from './ContactForm';
-import { ContactList } from './ContactList';
-import { Filter } from './Filter';
+import { addContact, removeContact, setFilter } from '../redux/contactsSlice';
+import { selectContacts, selectFilter } from '../redux/selectors';
+import { ContactForm } from '../components/ContactForm';
+import { ContactList } from '../components/ContactList';
+import { Filter } from '../components/Filter';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -11,16 +12,15 @@ export const App = () => {
   const filter = useSelector(selectFilter);
 
   useEffect(() => {
-  // Load contacts from localStorage
-  const savedContacts = localStorage.getItem('contacts');
-  if (savedContacts) {
-    const parsedContacts = JSON.parse(savedContacts);
-    parsedContacts.forEach(contact => {
-      dispatch(addContact(contact));
-    });
-  }
-}, [dispatch]);
-
+    // Load contacts from localStorage
+    const savedContacts = localStorage.getItem('contacts');
+    if (savedContacts) {
+      const parsedContacts = JSON.parse(savedContacts);
+      parsedContacts.forEach(contact => {
+        dispatch(addContact(contact));
+      });
+    }
+  }, [dispatch]);
 
   const handleContactSubmit = newContact => {
     dispatch(addContact(newContact));
@@ -41,7 +41,7 @@ export const App = () => {
   };
 
   const filteredContacts = contacts.filter(contact =>
-    contact.name && contact.name.toLowerCase().includes(filter && filter.toLowerCase())
+    contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
